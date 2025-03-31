@@ -148,7 +148,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2cbda9190a27c841a2302a63ccd1581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballInTube: []
+  balls: []
+  ballPrefab: {fileID: 2234121260804934841, guid: faff712993473194bb592f7f5049c36c, type: 3}
+  maxBall: 4
   topPosition: {fileID: 5235356027247225820}
 --- !u!1 &4790159775425411899
 GameObject:

@@ -7,28 +7,22 @@ public class GameController : MonoBehaviour
 {
     private Tube selectedTube = null;
     private List<Ball> sameBall;
-    private ControllState currentControllState;
-    
-    
-    //TestComand
-    public CommandInvoker commandInvoker;
-    private ICommand selectedCommand;
+    private List<MoveState> listUndo;
 
-    private void Start()
-    {
-        commandInvoker = new CommandInvoker();
-        SetControllState(ControllState.Start);
-    }
 
     private void Update()
     {
+        OnClickMouse();
+    }
+
+    private void OnClickMouse()
+    {
         if (Input.GetMouseButtonDown(0))
         {
-            if(currentControllState == ControllState.Processing)return;
-            if(Camera.main == null ) return;
+            if (Camera.main == null) return ;
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
-            if(hit.collider == null ) return;
+            if (hit.collider == null) return ;
             if (hit.collider.CompareTag("Tube"))
             {
                 Tube clickedTube = hit.collider.GetComponent<Tube>();
@@ -38,94 +32,59 @@ public class GameController : MonoBehaviour
                 }
             }
         }
-        
-        
     }
 
+
+
+
     //Xử kí khi ấn chọn vào ống nghiệm.
-    private void HandleTubeClick(Tube clickedTube)
-    {
-        //
-        if (selectedTube == null)
+        private void HandleTubeClick(Tube clickedTube)
         {
-            if (clickedTube.ballInTube.Count== 0) return;
-            selectedTube = clickedTube;
-            sameBall = selectedTube.GetSameBallInTube();
-            Debug.Log("Created SelectedCommand for: " + selectedTube.name);
-            selectedCommand = new SelectedCommand(sameBall, selectedTube);
-            commandInvoker.ExecuteSelectedCommand(selectedCommand);
-            
-            
-        }else
-        {
-            if (selectedTube != clickedTube)
+            //
+            if (selectedTube == null)
             {
-                SetControllState(ControllState.Processing);
-                //StartCoroutine(MoveToTube(selectedTube,clickedTube,sameBall));
-                MoveBalls(selectedTube, clickedTube);
+                if (clickedTube.balls.Count == 0) return;
+                selectedTube = clickedTube;
+                StartCoroutine(MoveToTop(selectedTube.PopBall()));
+                Debug.Log("Selected Tube");
+
+
             }
             else
             {
-                commandInvoker.UndoLastSelectedCommand();
-                SetControllState(ControllState.Finished);
+                if (selectedTube != clickedTube)
+                {
+                    //Di chuyen bong
+                }
+                else
+                {
+                }
             }
         }
-    }
 
-    
- //Comman di chuyển bóng
-    public void MoveBalls(Tube fromTube, Tube toTube)
-    {
-        if (sameBall.Count > 0 && toTube.CanReciveBall(sameBall[0]))
+        IEnumerator MoveToTop(Ball ball)
         {
-            ICommand movedCommand = new MoveBallCommand(sameBall, fromTube, toTube);
-            commandInvoker.ExecuteMoveCommand(movedCommand);
+            Debug.Log("Di chuyen len");
+            while (Vector3.Distance(transform.position,ball.tube.topPosition.position) > 0.01f)
+            {
+                ball.transform.position = Vector3.Lerp(transform.position, ball.tube.topPosition.position,15f *Time.deltaTime);
+                yield return null;
+            }
+            ball.transform.position = ball.tube.topPosition.position;
         }
-        else
-        {
-            //Trường hợp đang thêm bóng mà tube đầy chưa được xử lí
-            commandInvoker.UndoLastSelectedCommand();
-        }
-        SetControllState(ControllState.Finished);
-        GameManager.instance.CheckWinCodition();
-    }
-
-    //Hàm undo
-    public void UndoMove()
-    {
-        commandInvoker.UndoLastMoveCommand();
-    }
-    
-    //Quản lí trạng thái control
-    private void SetControllState(ControllState newState)
-    {
-        if(currentControllState == newState) return;
-        currentControllState = newState;
-        switch (currentControllState)
-        {
-            case ControllState.Processing:
-                break;
-            case ControllState.Finished:
-                selectedTube = null;
-                break;
-            case ControllState.Start:
-                selectedTube = null;
-                break;
-        }
-    }
-    
-}
-
-
-
-//Enum quản lí trạng thái của controller
-//Dùng để tránh việc người chơi nhấn chuột khi game dang thực hiện
-public enum ControllState
-{
-    Processing,
-    Finished,
-    Start
         
+    
 }
+
+
+    
+    
+   
+    
+
+
+
+
+
 
 

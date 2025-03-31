@@ -1,73 +1,93 @@
-using System;
 using System.Collections.Generic;
-using NUnit.Framework.Interfaces;
 using UnityEngine;
 
 public class Tube : MonoBehaviour
 {
-   public List<Ball> ballInTube = new List<Ball>();
-   private int maxBallInTube;
+   public List<Ball> balls = new List<Ball>();
+   public Ball ballPrefab;
+   public int maxBall = 4;
    public Transform topPosition;
-   private Vector3 pivot = new Vector3(0,0.5f,0);
+   
+   
+   public static Ball ballPoped;
+   //public static Tube tubePoped;
    
 
-   private void Awake()
-   {
-      pivot = transform.position + pivot;
-      maxBallInTube = 4;
-
-   }
-
+   
  //Hàm kiểm tra xem có thể nhận bóng hay không
    public bool CanReciveBall(Ball ball)
    {
-      if(ballInTube.Count >= maxBallInTube) return false;
-      return ballInTube.Count == 0 || ballInTube[ballInTube.Count - 1].ballColor == ball.ballColor;
+      return balls.Count == 0 || balls[balls.Count - 1].type == ball.type && balls.Count < 4;
    }
 
    //Lấy bóng có màu tương tự với bóng ở đỉnh liên tiếp
-   public List<Ball> GetSameBallInTube()
+   public List<Ball> GetSameBallCanPop(int type)
    {
-      if(ballInTube.Count == 0) return new List<Ball>();
-      List<Ball> sameBallInTube = new List<Ball>();
-      Ball topBall = ballInTube[ballInTube.Count - 1];
-      for (int i = ballInTube.Count - 1; i >= 0; i--)
+      if(balls.Count == 0) return null;
+      List<Ball> listBall = new List<Ball>();
+      for (int i = balls.Count - 1; i >= 0; i--)
       {
-         if (ballInTube[i].ballColor == topBall.ballColor)
+         if (balls[i].type == type)
          {
-            sameBallInTube.Add(ballInTube[i]);
+            listBall.Add(balls[i]);
          }
          else
          {
             break;
          }
       }
-
-      
-      return sameBallInTube;
+      return listBall;
    }
 
    
-   //Lấy vị trí top của bóng trong ống
-   public Vector3 GetTopPosition()
-   {
-      return pivot + new Vector3(0,ballInTube.Count * 0.85f, 0);
-   }
 
-   //Cập nhật trạng thái của tube
-   
-
-   public bool CheckComplete()
+   //Kiểm tra xem bình đã hoàn thành hay rỗng
+   public bool IsFullSameColor()
    {
-      if (ballInTube.Count == 0) return true;
-      Ball ballCheck = ballInTube[0];
-      foreach (var ball in ballInTube)
+      if (balls.Count == 0) return true;
+      if(balls.Count != 4) return false;
+      int type = balls[0].type;
+      for (int i = 0; i < 4; i++)
       {
-         if (ball.ballColor != ballCheck.ballColor)
+         if (type != balls[i].type)
          {
             return false;
          }
       }
+
       return true;
    }
+
+
+   
+   //Instantiate ball
+   public Ball InstantiateBall(int type)
+   {
+      var ball = Instantiate(ballPrefab, transform);
+      ball.SetType(type);
+      return ball;
+   }
+   
+   //Add ball vao danh sach
+   public void AddBall(Ball ball)
+   {
+      if(balls.Count >= 4) return;
+      balls.Add(ball);
+     // ball.transform.SetParent(transform);
+      ball.tube = this;
+      ball.transform.localPosition = new Vector3(0, balls.Count * 0.5f,0);
+   }
+
+
+   public Ball PopBall()
+   {
+      if(balls.Count == 0) return null;
+      ballPoped = balls[balls.Count - 1];
+      balls.Remove(ballPoped);
+      return ballPoped;
+      
+
+   }
+   
+   
 }

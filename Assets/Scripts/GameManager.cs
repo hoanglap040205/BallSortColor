@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (var tube in tubes)
         {
-            if (!tube.CheckComplete())
+            if (!tube.IsFullSameColor())
             {
                 Debug.Log("Chua thang ");
                 return;

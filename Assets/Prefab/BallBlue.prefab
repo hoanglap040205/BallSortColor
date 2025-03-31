@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 6361613685624929644}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.18, y: -2.16, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4567835045031884752, guid: 170a100e725fb8049b03d3c730aaeee9, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_Size: {x: 1.08, y: 1.08}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &2234121260804934841
@@ -101,7 +101,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ab8a0992e8bf8c45947940b262b0fb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballColor: 2
+  type: 0
+  sprites:
+  - {fileID: -2021173918079641696, guid: a373190d974b61f4b81afafa2395d539, type: 3}
+  - {fileID: -4567835045031884752, guid: 170a100e725fb8049b03d3c730aaeee9, type: 3}
+  - {fileID: 5153044214874435941, guid: 4dc0029dae059f64eaa730a72a3d0c0e, type: 3}
+  - {fileID: -4257300284075581417, guid: 2644bbe0eaf50d546a986b778a0d1d7f, type: 3}
+  - {fileID: 2434161981773447329, guid: 004a460d82c41df43b93bab1f5c1acfd, type: 3}
+  - {fileID: 3465286685962602723, guid: 422e8edebd95c974b80cb46553f1740d, type: 3}
+  - {fileID: 5864501256832516825, guid: eb87bb24ab18c7f44bb9068482b37c19, type: 3}
+  - {fileID: 2459698237312560550, guid: e6483689dc1da294d9c786ee2be150ce, type: 3}
+  currentBallState: 0
 --- !u!95 &-243447433624546503
 Animator:
   serializedVersion: 7

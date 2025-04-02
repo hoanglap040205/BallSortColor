@@ -14,12 +14,11 @@ public class Tube : MonoBehaviour
       ball.SetType(type);
       if(balls.Count >= 4) return;
       balls.Add(ball);
-      // ball.transform.SetParent(transform);
       ball.transform.localPosition = Pos();
    }
    public Vector3 Pos()
    {
-      return new Vector3(0, balls.Count-0.5f,0);
+      return new Vector3(0, balls.Count * 0.6f,0);
    }
  //Hàm kiểm tra xem có thể nhận bóng hay không
    public bool CanReciveBall(Ball ball)

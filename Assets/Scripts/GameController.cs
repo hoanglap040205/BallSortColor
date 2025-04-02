@@ -44,17 +44,7 @@ public class GameController : MonoBehaviour
             if (selectedTube != clickedTube)
             {
                 Debug.Log(clickedTube.name);
-                foreach (var b in sameBalls)
-                {
-                    if (clickedTube.CanReciveBall(b))
-                    {
-                        StartCoroutine(MoveBallCoroutine(selectedTube, clickedTube,b));
-                    }
-                    else
-                    {
-                        selectedTube = null;
-                    }
-                } 
+                HandleBallMove(sameBalls,selectedTube,clickedTube);
             }
             else
             {
@@ -73,6 +63,23 @@ public class GameController : MonoBehaviour
         {
           b.Deselected();  
         }
+    }
+
+    public void HandleBallMove(List<Ball> balls, Tube fromTube, Tube toTube)
+    {
+        foreach (var b in sameBalls)
+        {
+            if (toTube.CanReciveBall(b))
+            {
+                fromTube.balls.Remove(b);
+                StartCoroutine(MoveBallCoroutine(selectedTube, toTube,b));
+                toTube.balls.Add(b);
+            }
+            else
+            {
+                selectedTube = null;
+            }
+        } 
     }
     
     public IEnumerator MoveBallCoroutine(Tube fromTube,Tube toTube,Ball ball)
@@ -111,6 +118,8 @@ public class GameController : MonoBehaviour
         }
         var undoMove = undoStack.Pop();
         undoMove.ball.transform.position = undoMove.from.topPosition.position;
+        undoMove.to.balls.Remove(undoMove.ball);
+        undoMove.from.balls.Add(undoMove.ball);
 
     }
     

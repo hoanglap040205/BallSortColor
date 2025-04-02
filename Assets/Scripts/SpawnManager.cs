@@ -9,7 +9,7 @@ public class SpawnManager : MonoBehaviour
 
     private List<int> typeList = new List<int>()
     {
-        1, 1, 2, 2, 1, 0, 2, 0, 0, 1, 2, 0
+        3, 3, 0, 2, 0, 3, 0, 1, 2, 1, 3, 1, 1, 2, 2, 0
     };
 
     private void Start()
@@ -19,13 +19,12 @@ public class SpawnManager : MonoBehaviour
 
     private void SpawmBall()
     {
-        for (int i = 0; i < tubes.Count-2; i++)
+        for (int i = 0; i < tubes.Count-1; i++)
         {
             for (int j = 0; j < tubes[0].maxBall; j++)
             {
                 int type = typeList[4 * i + j];
-                var ball = tubes[i].InstantiateBall(type);
-                tubes[i].AddBall(ball);
+                tubes[i].InstantiateBall(type);
             }
         }
     }

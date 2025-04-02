@@ -8,12 +8,19 @@ public class Tube : MonoBehaviour
    public int maxBall = 4;
    public Transform topPosition;
    
-   
-   public static Ball ballPoped;
-   //public static Tube tubePoped;
-   
-
-   
+   public void InstantiateBall(int type)
+   {
+      var ball = Instantiate(ballPrefab, transform);
+      ball.SetType(type);
+      if(balls.Count >= 4) return;
+      balls.Add(ball);
+      // ball.transform.SetParent(transform);
+      ball.transform.localPosition = Pos();
+   }
+   public Vector3 Pos()
+   {
+      return new Vector3(0, balls.Count-0.5f,0);
+   }
  //Hàm kiểm tra xem có thể nhận bóng hay không
    public bool CanReciveBall(Ball ball)
    {
@@ -21,15 +28,17 @@ public class Tube : MonoBehaviour
    }
 
    //Lấy bóng có màu tương tự với bóng ở đỉnh liên tiếp
-   public List<Ball> GetSameBallCanPop(int type)
+   public List<Ball> GetSameBallCanPop()
    {
       if(balls.Count == 0) return null;
       List<Ball> listBall = new List<Ball>();
+      Ball ballType = balls[balls.Count - 1];
       for (int i = balls.Count - 1; i >= 0; i--)
       {
-         if (balls[i].type == type)
+         if (balls[i].type == ballType.type)
          {
             listBall.Add(balls[i]);
+            balls[i].Selected();
          }
          else
          {
@@ -38,9 +47,6 @@ public class Tube : MonoBehaviour
       }
       return listBall;
    }
-
-   
-
    //Kiểm tra xem bình đã hoàn thành hay rỗng
    public bool IsFullSameColor()
    {
@@ -58,36 +64,6 @@ public class Tube : MonoBehaviour
       return true;
    }
 
-
-   
-   //Instantiate ball
-   public Ball InstantiateBall(int type)
-   {
-      var ball = Instantiate(ballPrefab, transform);
-      ball.SetType(type);
-      return ball;
-   }
-   
-   //Add ball vao danh sach
-   public void AddBall(Ball ball)
-   {
-      if(balls.Count >= 4) return;
-      balls.Add(ball);
-     // ball.transform.SetParent(transform);
-      ball.tube = this;
-      ball.transform.localPosition = new Vector3(0, balls.Count * 0.5f,0);
-   }
-
-
-   public Ball PopBall()
-   {
-      if(balls.Count == 0) return null;
-      ballPoped = balls[balls.Count - 1];
-      balls.Remove(ballPoped);
-      return ballPoped;
-      
-
-   }
    
    
 }

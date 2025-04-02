@@ -16,7 +16,7 @@ public class SelectedCommand : ICommand
         Debug.Log("Selected Command");
         foreach (var ball in _balls)
         {
-            ball.SetAnim(BallState.Selecting);
+            ball.Selected();
 
         }
     }
@@ -25,7 +25,7 @@ public class SelectedCommand : ICommand
     {
         foreach (var ball in _balls)
         {
-            ball.SetAnim(BallState.Idle);
+            ball.Deselected();
 
         }
 

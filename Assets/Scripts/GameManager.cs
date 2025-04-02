@@ -44,4 +44,10 @@ public class GameManager : MonoBehaviour
         Debug.Log(" Đang tải lại màn chơi...");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }

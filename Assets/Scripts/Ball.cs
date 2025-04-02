@@ -4,15 +4,13 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     public BallColor ballColor;
-    public BallState currentBallState;
     private Animator anim;
     private float speed;
     
     private void Start()
     {
         anim = GetComponent<Animator>();
-        SetAnim(BallState.Idle);    
-        speed = 25f;
+        speed = 30f;
     }
     //Gọi hàm di chuyển đến từng đích
     public IEnumerator MoveBallCoroutine(Tube fromTube,Tube toTube)
@@ -20,7 +18,8 @@ public class Ball : MonoBehaviour
         yield return MovePos(fromTube.topPosition.position);
         yield return MovePos(toTube.topPosition.position);
         yield return MovePos(toTube.GetTopPosition());
-        SetAnim(BallState.Idle);
+        anim.SetBool("Selected",false);
+
     }
 
 
@@ -37,20 +36,14 @@ public class Ball : MonoBehaviour
         transform.position = targetPos;
     }
 
-    public void SetAnim(BallState newState)
+    public void Selected()
     {
-        if(currentBallState == newState) return;
-        currentBallState = newState;
-        switch (currentBallState)
-        {
-            case BallState.Idle:
-                anim.SetBool("Selected",false);
-                break;
-            case BallState.Selecting:
-                anim.SetBool("Selected",true);
-                break;  
-
-
-        }
+        anim.SetBool("Selected",true);
     }
+
+    public void Deselected()
+    {
+        anim.SetBool("Selected",false);
+    }
+    
 }
